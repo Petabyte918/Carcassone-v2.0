@@ -3,6 +3,8 @@
 Meteor.subscribe("useNames");
 Meteor.subscribe("gameplays");
 Meteor.subscribe("messages");
+//INTEGRACION
+Meteor.subscribe("turnoIU");
 
 //Para tener acceso a Stats
 Meteor.subscribe("all_stats");
@@ -16,8 +18,6 @@ function gameReady() {
             begin = true;
             //Cambiamos el status del gameplay
             Gameplays.update({_id: gameplay._id}, {$set: {status: true}});
-            //llamamos a empezar partida
-            Meteor.call('gameBegin');
         }   
     });
 }
@@ -29,10 +29,17 @@ function partidaEmpezada() {
     var idusuario = Meteor.userId();
     gameplays.forEach(function (gameplay) {
         if ((gameplay.gameplay_list.indexOf(idusuario) != -1) && (gameplay.status == true))  {
-            empezada = true;
-            $('#container_lateral2').hide();
-            $('#container_principal').show();
-            Session.set('tab', null);
+		empezada = true;
+		$('#container_lateral1').hide();
+		$('#container_lateral2').hide();
+		$('#container_principal').show();
+		Session.set('tab', null);
+		//INTEGRACION 1
+		if (gamelock == false) {
+			//Supongo que esto lo llaman todos los jugadores
+			//EmpezarTodo(gameplay._id, gameplay.gameplay_list, idusuario);
+		}
+		//
         }   
     });
     return empezada;
@@ -48,6 +55,7 @@ Tracker.autorun(function(){
     }
     else {
         gamelock = false;
+	$('#container_lateral1').show();
         $('#container_lateral2').show();
         $('#container_principal').hide();     
     }
@@ -69,7 +77,6 @@ Tracker.autorun(function(){
 	}else{
 		aux_creat_id = game.creator_id;
 	}
-		
 	aux_inicio= true;
 });
 
