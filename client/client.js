@@ -37,7 +37,7 @@ function partidaEmpezada() {
 		//INTEGRACION 1
 		if (gamelock == false) {
 			//Supongo que esto lo llaman todos los jugadores
-			//EmpezarTodo(gameplay._id, gameplay.gameplay_list, idusuario);
+			EmpezarTodo(gameplay._id, gameplay.gameplay_list, idusuario);
 		}
 		//
         }   
@@ -59,6 +59,83 @@ Tracker.autorun(function(){
         $('#container_lateral2').show();
         $('#container_principal').hide();     
     }
+});
+
+var reactiva = null;
+Tracker.autorun(function() {
+	reactiva = Turno.find();
+	reactiva.forEach(function(m) {
+		if (Meteor.userId() != User_IdIA) {
+			if (!m.scroll) {
+				if (m.Comando === "PedirPieza") {
+					if (!m.rotacion) {            
+						var piezaNueva = new pieza (m.nombrePieza, 11.5*64, 8*64, false, 0, false);
+						board.add(piezaNueva);
+					} else {
+						rotacionTracker = [m.rotacion, m.numRotacion];
+					}
+				} else if(m.Comando === "ColocarPieza") {
+					colocadaTracker = true;
+					xTracker = m.posx;
+					yTracker = m.posy;
+					xIA = m.casillaX;
+					yIA = m.casillaY;
+				} else if (m.Comando === "ColocarSeguidor") {
+					colocadoSegTracker = true;
+					xsegTracker = m.posxseg;
+					ysegTracker = m.posyseg;
+					numcolor = m.numColor; 
+				} else if (m.Comando === "BorrarSeguidor") {
+					var array = m.arrayQuitarSeg;
+					array.forEach(function (e, i) {						
+						borrarSeguidor(e.x, e.y);
+					});
+				} else if (m.Comando === "ActualizarTurno") {
+					JugadoresIA = m.Jugadores;
+					User_IdIA = m.User_id;
+					if (Meteor.userId() === User_IdIA){
+						numcolor = m.numColor;
+						otrapieza = true;
+						DejarScroll = true;
+						Game.setBoard(2,new TextoPideFicha("Pulsa enter para pedir ficha ",playGame));
+					}
+					Game.setBoard(1,new Jugadores(JugadoresIA));
+				} else if (m.Comando === "JugadaIA") {
+					var piezaNueva = new pieza (m.nombrePieza, m.posx, m.posy, true, m.numRotacion, true);
+					board.add(piezaNueva);
+					numcolor = m.numColor;
+					if (m.posxseg !=0 && m.posyseg !=0) {
+						var seguidor = new Seguidor (m.posxseg, m.posyseg,verColorSeg(), m.casillaX, m.casillaY);
+						board.add (seguidor);
+					}
+				} else if (m.Comando === "FinPartida") {
+					Game.setBoard(6,new final(m.resumenFinal));   
+				} else if (m.Comando === "FinPL") {
+					partidaTerminada(m.objetoPL);
+				}
+			} else {
+				DejarScroll = true;
+				ladoScrollTracker = m.ladoscroll;
+				contadorScroll++;	
+			}
+		} else {
+			if (m.Comando === "ActualizarTurno") {
+				JugadoresIA = m.Jugadores;
+				User_IdIA = m.User_id;
+				if (Meteor.userId() === User_IdIA) {
+					numcolor = m.numColor;
+					otrapieza = true;
+					DejarScroll = true;
+					Game.setBoard(2,new TextoPideFicha("Pulsa enter para pedir ficha ",playGame));
+				}
+				Game.setBoard(1,new Jugadores(JugadoresIA));
+			} else {
+				JugadoresIA = m.Jugadores;
+				User_IdIA = m.User_id;
+				Game.setBoard(1,new Jugadores(JugadoresIA));
+			}
+		}
+	});
 });
 
 var aux_inicio = false;

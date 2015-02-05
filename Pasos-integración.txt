@@ -1,0 +1,61 @@
+PASOS EN LA INTEGRACIÓN:
+(Empiezo a escribir esto con algunas cosas ya numeradas. Segun vaya integrando 
+cosas las iré marcando con una etiqueta integración y un número).
+
+1.- Empezar partida:
+	1.- Si se inicia el juego, se llama a EmpezarTodo(m.ID_Partida, m.Jugadores, m.User_id);
+		(Se hace uso de turno para empezar partida, que a mi ver es una guarrada. En este caso lo 
+		evitamos. Ademas, EmpezarTodo me requiere variables que aqui no tengo.)
+		Game->EmpezarTodo:
+		Llama a Game.initialize("gameC",sprites,startGame);
+		Y renombra lo siguiente:
+			JugadoresIA = arrayJugadores;
+			User_IdIA = user_Id;
+			Id_Partida = id_partida;
+			longitudcolor = arrayJugadores.length;
+	2.-Game->startGame. Es parte de la IU, no tocamos nada.
+	
+	3.-Reactivamente se va haciendo lo siguiente:
+		Se comprueba if(Meteor.userId() != User_IdIA), que debe ser algo así como comprobar que es tu turno.
+		Si lo es pides pieza, la colocas, colocar seguidor, borras seguidor etc etc. Todo parte de "m.comando"
+		(Hay mil y una traza..que guarrada. Y todo mal tabulado, que caos!!!!)
+		Si no lo es y m.Comando === "ActualizarTurno" (no me quiero meter a ver que es), 
+		hace User_IdIA = m.User_id;
+		Y si no lo es tb hace eso-->>??. Bueno, mientras no haya problemas no merece la pena ver que hace.
+		
+	PROBLEMA: Hasta aqui se me muere el signin y probablemente alguna cosa mas
+		He escrito suscribe en lugar de subscribe. Porque no se queja? Estupido meteor.
+	YA DE PASO: como el canvas que necesito es grande, oculto el chat lateral izquierdo.
+	HASTA AQUI: Vaaaaaaamos. Va bien. Se muestra el canvas con el tablero y una ficha en medio.
+		Copio el codigo y chequeo que esten bien las variables. Y quito estupidas trazas. Y tabulo.
+		PROBLEMA: Me he vuelvo a cargar el sigin y probablemente alguna cosa más.
+			Claramente ocurre cuando llamo a Turno.find();
+			Voy a dejarlo de momento comentado y voy a analizar que es Turno
+	4.-Turno
+		client->turno:
+			Meteor.subscribe("turnoIU");
+			reactiva = Turno.find();
+			Luego se hace un forEach de turno.
+		server->turno:
+			Meteor.publish("turnoIU"); 
+			No se toca nada más.
+			(Cambio el publish que habia por 
+			Meteor.publish("turnoIU", function() {
+				return Turno.find();
+			});)
+			PROBLEMA: Si hago esto me salta error, me dice que no esta definido. Igual es porque ya no
+			lo puedo llamar desde otros archivos. Consultar con pedro. Lo dejo como estaba.
+		IA.js->turno:
+			Se hacen muchas llamadas a this.turno y a this.partida.turno
+			¿Relevante?
+		IU->turno:
+			Turno.remove({});
+			Turno.insert(Que inicializa un monton de cosas)
+		engine.js->turno:
+			Ninguna llamada
+		game.js->turno:
+			Turno.findOne({});
+			 Turno.update
+			 pendiente--------------
+		
+		

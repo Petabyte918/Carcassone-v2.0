@@ -25,7 +25,7 @@ Meteor.publish("all_stats", function() {
 });
 
 //INTEGRACION
-Meteor.publish("turnoIU");
+Meteor.publish("turnoIU"); 
 
 //Gestionamos privacidad
 Gameplays.allow({  
