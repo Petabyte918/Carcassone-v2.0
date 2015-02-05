@@ -1,0 +1,21 @@
+-- GITHUB --
+
+-- Comandos
+sudo apt-get install -y git-core
+git config --global user.name ”tu nombre y apellidos"
+git config --global user.email tu-dir-correo-e
+git config --global color.ui true 
+git add -all --> Añade todos los ficheros en el directorio actual
+git remote add origin https://github.com/lucasKhane/Carcassone-v2.0.git
+
+-- .gitignore
+En el raíz del proyecto el fichero .gitignore especifica los ficheros que no deben añadirse al repo.
+Ejemplos:
+# a comment – línea de comentario
+*.a # ignorar los ficheros que acaben en .a
+!lib.a # no ignorar lib.a, aunque hemos ignorado los acabados en .a
+/TODO # ignorar sólo el fichero /TODO, no los ficheros TODO en subirs
+build/ # ignorar todos los ficheros del subdir build/
+doc/*.txt # ignorar doc/notes.txt, pero nodoc/server/arch.txt 
+
+-- FIN --
