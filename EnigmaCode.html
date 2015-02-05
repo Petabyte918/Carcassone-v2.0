@@ -1,0 +1,261 @@
+<head>
+  <title>Carcassonne</title>
+</head>
+
+<body>
+    <script src='client/game.js'></script>
+    <script src='client/engine.js'></script>
+
+<div id="globalbox">
+    
+    <div id="cabecera">
+        <div id="banner"> 
+        </div>
+        <div id="userbox">
+            <div id="loginbox">
+                {{> loginButtons align="right"}}
+            </div>
+        </div>
+    </div>
+    
+    <div id="menu_principal">
+        <ul id="menu">
+		    {{> tabs}}
+	    </ul>
+    </div>
+    
+    <div id="container_lateral1">
+        <div id="chat">
+		    {{> chatemp}}
+        </div>
+    </div>
+    
+    <div id="container_lateral2">
+        {{> viewsEstadisticas}}
+        <div id="logintroduccion">
+            <h1> Video de introduccion al juego</h1>
+            <embed width="350" height="250"
+                src="https://www.youtube.com/v/KuwGehijgF8">
+        </div>
+    </div>
+
+    <div id="container_principal">
+        {{> carcassone}}
+    </div>
+    
+    {{#if currentUser}}
+        {{> views}}
+	{{/if}}
+    
+    <div id="pie">
+        <h1>Contacta con EnigmaTeam | Email de contacto: Enigma@gmail.es | Copyright © 2014 EnigmaTeam | Política de privacidad | Términos y Condiciones</h1>
+        <h2>Cualquier parecido con el juego Carcassone es pura coincidencia</h2>
+    </div>
+</div>
+</body>
+
+<template name="views">
+	{{#if tab.usuarios}}
+    <div id="usuarios">
+        {{> userlist}}
+    </div>
+	{{/if}}
+
+	{{#if tab.partidas}}
+    <div id="partidas">
+        {{> crear_partida}}
+    </div>
+	{{/if}}
+
+	{{#if tab.waiting}}
+    <div id="waiting">
+       	{{> waiting}}
+   	</div>
+	{{/if}}
+	
+	{{#if tab.salas_de_espera}}
+    <div id="salas_de_espera">
+       	{{> salas_de_espera}}
+   	</div>
+	{{/if}}
+
+	{{#if tab.amigos}}
+    <div id="amigos">
+       	{{> amigos}}
+   	</div>
+	{{/if}}
+	
+	{{#if tab.carcassone}}
+    <div id="carcassone">
+       	{{> carcassone}}
+   	</div>
+	{{/if}}
+	
+</template>
+
+<template name="tabs">
+    <li><a href="#" id="liinicio">Inicio</a></li>
+    <li><a href="#lijuegos" id="lijuegos">Juegos</a></li>
+    <li><a href="#licrear_partida" id="licrear_partida">Crear Partida</a></li>
+    <li><a href="#lisalas_de_espera" id="lisalas_de_espera">Salas de espera</a></li> 	
+    <li><a href="#lipartida_rapida" id="lipartida_rapida">Partida rapida</a></li>
+    <li><a href="#liestadisticas" id="liestadisticas">Estadisticas</a> 	
+        <ul>
+            <li><a href="#liPersonales" id="liPersonales">Personal</a></li> 
+            <li><a href="#liGeneral" id="liGeneral">General</a></li> 	
+            <li><a href="#liCarcassone" id="liCarcassone">Carcassone</a></li> 	
+            <li><a href="#liOtros" id="liOtros">Otros juegos</a></li> 		
+        </ul> 	
+    </li> 	
+    <li><a href="#liregistro" id ="liregistro">Registro</a></li> 
+    <li><a href="#liamigos" id ="liamigos">Amigos</a></li> 			
+</template>
+
+<template name="viewsEstadisticas">
+    <p>
+        <input type="button" id="anadeStats" value="Anade Stats"/>
+    </p>
+
+    {{#if current_Stat.StatsPersonales}}
+    <div id="StatsPersonales">
+        {{> StatsPersonales}}
+    </div>
+	{{/if}}
+
+	{{#if current_Stat.MejoresGeneral}}
+    <div id="MejoresGeneral">
+        {{> MejoresGeneral}}
+    </div>
+	{{/if}}
+
+	{{#if current_Stat.MejoresCarcassone}}
+    <div id="MejoresCarcassone">
+       	{{> MejoresCarcassone}}
+   	</div>
+	{{/if}}
+	
+	{{#if current_Stat.Otros}}
+    <div id="Otros">
+       	{{> Otros}}
+   	</div>
+	{{/if}}
+</template>
+
+<template name="StatsPersonales">
+    <div id="personal">
+        <p>Estadisticas Personales</p>
+        <tr>Nombre: <td>{{name}}</td></tr> 
+        <tr> Juego: <td>{{game_name}}</td></tr>
+	    <tr>Puntos: <td>{{points}}</td></tr>
+	    <tr>Partidas totales jugadas: <td>{{played_games}}</td></tr>
+	    <tr>Partidas ganadas: <td>{{winned_games}}</td></tr>
+	    <tr>Partidas empatadas: <td>{{drawed_games}}</td></tr>
+	    <tr>Partidas perdidas: <td>{{lossed_games}}</td></tr>
+	    <tr>Puntos por partida: <td>{{points_per_game}}</td></tr>
+    </div>
+</template>
+
+<template name="MejoresGeneral">
+    <div id="personal">
+        <h1>Estadisticas Generales</h1>
+        <p>Puntos totales:</p>
+        {{#each topScorers}}
+            <tr>
+	            <strong>{{player_name}}</strong>:          {{game_name.points}}
+            </tr>
+        {{/each}}
+    </div>
+</template>
+
+<template name="MejoresCarcassone">
+    <div id="personal">
+        <p>Estadisticas Carcassone</p>
+        <tr>Partidas jugadas totales:<td>{{Totalplayed_games}}</td></tr>
+	    <tr>Partidas ganadas totales: <td>{{Totalwinned_games}}</td></tr>
+	    <tr>Partidas empatadas totales: <td>{{Totaldrawed_games}}</td></tr>
+	    <tr>Partidas perdidas totales: <td>{{Totallossed_games}}</td></tr>
+	    <tr>Puntos por partida medios totales: <td>{{Average_point_per_game}}</td></tr>
+	    <tr>Puntos totales obtenidos en el juego: <td>{{Totalpoints}}</td></tr>
+    </div>
+</template>
+
+<template name="chatemp">
+	<form class="new-task">
+		<input type="text" id="chatinput"/>
+	</form>
+	<div id = "message">
+      {{#each messages}}
+			<strong> {{name}}:	</strong>{{message}}<br>	
+      {{/each}}
+	</div>
+</template>
+
+<template name="userlist">
+     <h1>Registro de Usuarios</h1>
+     {{# each users}}  			           
+  	    {{username}}     <input class="addfriend" type="button" value="Añadir amigo"> <br>
+
+     {{/each}}
+</template>
+
+<template name="crear_partida">
+	<h1>Crear Partida</h1>
+    <form class="new-task">
+		<p>Nombre de la partida</p>
+		<p><input type="text" placeholder="Introduce un nombre para tu partida" id = "partidainput"></p>
+        <p>Jugadores:</p><p><input type="number" min="1" max="8" placeholder="Introduce nº jugadores" id= "jugadores"></p>
+        <p><button class="create" type="submit" id="aceptar">Aceptar</button></p>
+    </form>
+</template>
+
+<template name="waiting">	
+    <h1> Esperando a otros jugadores </h1>
+    <br>La partida comenzará automáticamente cuando estén todos los jugadores. (Un total de: {{max_players}})<br>
+    <p2>Jugadores Esperando: {{waiting}}</p2>
+    {{#each players}}
+        <h2>{{username}}</h2>
+    {{/each}}
+    <p2>Jugadores Restantes: {{restantes}}</p2>
+    {{#each emptyplayers}}
+        <h2>"{{username}}"</h2>
+    {{/each}}
+    <input class="exitgame" type="button" value="Salir de la sala de espera">
+</template>
+
+
+<template name="salas_de_espera">
+    <h1>Salas de espera disponibles</h1>
+    {{#each gameplays}}
+	    <tr>
+	        <td width= 300><strong>{{gameplay_name}}:</strong></td>
+	        <td width= 300> Creada por {{creator_name}} {{num_players}}/{{max_players}}</td>
+	        <td width= 300><input class="joingame" type="button" value="Join" /></td>	
+	    </tr>
+    {{/each}}
+</template>
+
+<template name="amigos">
+     <h1>Amigos</h1>
+	 <h2> Conectados </h2>
+     {{# each friend_connect}}  			           
+  	    {{username}} <input class="deletefriend" type="button" value="Eliminar"> <br>
+     {{/each}}
+
+	 <h2> Desconectados </h2>
+     {{# each friend_disconnect}}  			           
+  	    {{username}} <input class="deletefriend" type="button" value="Eliminar"> <br>
+     {{/each}}
+</template>
+
+
+<template name="carcassone">
+  <canvas id='gameC' width='1150' height='600'></canvas>
+</template>
+
+<template name="alien_invasion">
+    <canvas id='game' width='320' height='480'></canvas>
+</template>
+
+<template name="froot_wars">
+    <canvas id='game' width='640' height='480'></canvas>
+</template>

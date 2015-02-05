@@ -1,0 +1,181 @@
+/* Center the container */
+#partida {
+  margin-top:120px;
+  margin-left:200px;
+  width:480px;
+}
+#tablero{
+	background-color: black;
+}
+#messages {
+  position: relative;
+  float: left;
+  margin-top:5px;
+  margin-left:0px;
+  width: 100px;
+}
+
+/* Give canvas a background */
+
+#chat{  
+ border-style: solid;
+ border-width: 5px;
+ background-color:blue;
+}
+
+#fondo:hover{
+
+ background-color: grey;
+ width: 400px;
+
+}
+
+#menu{
+ position: relative;
+ float: left;
+} 
+
+#game_features{
+ background: #ADD8E6;
+ padding:100px;
+}
+
+#points_id{
+ background: white;
+}
+#start_game{
+    margin-left: 80%;
+}
+
+#banner{
+    border-radius: 4px;
+    position: relative;
+    width:100%
+    height:1000px;
+    /*background: red;
+    border-style: solid;
+    border-width: 5px;*/
+    background-position: center center;
+    background-repeat: no-repeat;
+    /*height: 188px;*/
+}
+
+#waiting_matches{
+ position:relative;
+ border-style: solid;
+ border-width: 5px;
+ float:left;
+ background: red/*#E6E6FA*/;
+ border: 2px solid black; 
+ border-radius: 4px;
+ width: 78%;
+ height: 650px;
+ margin-right: 0%;
+}
+
+#navegacion{
+ width: 100%;
+ position:relative;
+ float:left;
+ padding:10px;
+ overflow:hidden;
+}
+
+#menu-login{
+ width: 18%;
+ position:relative;
+ float:left;
+}
+
+.btn-group-vertical{
+ position:relative;
+ float:left;
+ display:inline-block;
+}
+
+#game_features{
+ position: relative;
+ width: 30%;
+ height: 20%;
+ margin: 10% auto;
+ border-radius: 10px;  
+}
+#rooms{
+ width: 140px;
+}
+.play_game{
+ border: 2px solid #003B62;
+ position: relative;
+ float: right;
+ background: #00FFFF;
+}
+#play_game_button{
+ position:relative;
+ float: right;
+ 
+}
+.tamano {
+ width: 218px;
+ height: 40px;
+ color: #A0522D;
+}
+
+.estilopartida{
+ padding: 20px;
+}
+
+#login-buttons{
+ display: block;
+}
+
+#wait_start{
+ position:relative;
+ float: right;
+}
+#waiting_gif{
+ margin-left: 20%; 
+}
+#wait_cancel{
+ position:relative;
+ float: left;
+}
+#tablero {	/*No tocar nada para que qude bien con IU*/
+ background: white;		
+ width: 1150px;
+ height: 600px;
+ margin-left: 260px;
+}
+#container{
+ position: relative;
+ float: left;
+ margin-left: 25%;
+ border-style: solid:
+ border-radius: 5px;
+}
+
+/*.btn-defaultplay_game_button{
+ margin-left:87%;
+ margin-right:0%;
+ margin-top:-10%;
+} */
+
+.AlienFroot{
+ position: relative:
+ float: left;
+ background: white;
+ width: 250px;
+ height: 30%;
+}
+#gamecontainer{
+ margin-left: 10%; 
+}
+.ajustar{
+ width: 115px;
+ float: left;
+ word-wrap: break-word;
+}
+#waiting_for_players{
+ margin: 20% auto;
+ width: 32%;
+ height: 30%;
+} /* CSS declarations go here */

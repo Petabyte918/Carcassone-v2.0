@@ -1,0 +1,12 @@
+Juego Carcassone
+
+Esta mezlacada la parte de la interfaz de usuario y la platarforma
+
+De la interfaz de usuario disponemos de:
+-ERRE.html (Se borrará) - borrado
+-ERRE.css (Se borrará)  - borrado
+-ERRE.js - borrado
+-cliente/engine.js
+-cliente/game.js
+-public/sprites
+-public/sprites/tablero.png
