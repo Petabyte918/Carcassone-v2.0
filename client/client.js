@@ -1,6 +1,6 @@
 
 //Suscripciones a las colecciones
-Meteor.subscribe("useNames");
+Meteor.subscribe("userNames");
 Meteor.subscribe("gameplays");
 Meteor.subscribe("messages");
 //INTEGRACION

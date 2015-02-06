@@ -24,7 +24,7 @@ cosas las iré marcando con una etiqueta integración y un número).
 		Y si no lo es tb hace eso-->>??. Bueno, mientras no haya problemas no merece la pena ver que hace.
 		
 	PROBLEMA: Hasta aqui se me muere el signin y probablemente alguna cosa mas
-		He escrito suscribe en lugar de subscribe. Porque no se queja? Estupido meteor.
+	SOLUCION: He escrito suscribe en lugar de subscribe. Porque no se queja? Estupido meteor.
 	YA DE PASO: como el canvas que necesito es grande, oculto el chat lateral izquierdo.
 	HASTA AQUI: Vaaaaaaamos. Va bien. Se muestra el canvas con el tablero y una ficha en medio.
 		Copio el codigo y chequeo que esten bien las variables. Y quito estupidas trazas. Y tabulo.
@@ -56,6 +56,17 @@ cosas las iré marcando con una etiqueta integración y un número).
 		game.js->turno:
 			Turno.findOne({});
 			 Turno.update
-			 pendiente--------------
-		
+			 Luego hay cosas como actualizarTurno, IATurno, GestionTurno y basicamente eso.
+		SOLUCION: Estoy tontito. He añadido en models la coleccion. De momento solo añado esa.
+			No me deberían hacer falta más. Dejo el publish de turnoIU con function, si me da error por
+			algun lado lo quito, pero no deberia.
+	(Parentesis para investigar):
+		¿Qué es?
+			Template.draw_matches
+			Template.menu_bar
+			Template.join_match
+			Template.options
+		¿Me afecta?
+			current_game = Session.get("current_game");->Yo no uso nada de esto, de momento
+
 		

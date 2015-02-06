@@ -1,7 +1,6 @@
+
 //Controlamos como el servidor de METEOR publica sus colecciones y como los cliente se suscriben a ellas
-
-
-Accounts.onCreateUser(function(options, user){
+Accounts.onCreateUser(function(options, user) {
     user.amigos = [];
     return user;
 });
@@ -18,14 +17,14 @@ Meteor.publish("gameplays", function() {
 	return Gameplays.find();
 });
 
-//Publico estadisticas, que tiene acceso a todos los campos de cada tipo de estadistica
 Meteor.publish("all_stats", function() {
-    //Devuelo una funcion que me devuelve los campos de cada tipo de Stat
     return Estadisticas.find();
 });
 
 //INTEGRACION
-Meteor.publish("turnoIU"); 
+Meteor.publish("turnoIU", function() { 
+	return Turno.find();
+});
 
 //Gestionamos privacidad
 Gameplays.allow({  
@@ -53,7 +52,6 @@ Meteor.users.allow({
     update: function(userId, doc) {  
 	  return !! userId; 
 	}
-
 });
 
 //Metodos de METEOR
@@ -78,7 +76,6 @@ Meteor.methods({
 			Meteor.users.update({_id : friend}, {$addToSet: {friend_list: Meteor.userId()}})	
 		}
 	},
-
 	deleteFriend: function (friend){
 		if (Meteor.userId()){
 			Meteor.users.update({_id : Meteor.userId()}, {$pull: {friend_list: friend}})	
@@ -152,9 +149,13 @@ Meteor.methods({
 	generarPartidaPL: function(objetoPartidaPL){
 		generarPartida(objetoPartidaPL.idPartida, objetoPartidaPL.arrayJugadores, objetoPartidaPL.numJugadores);
 	},
+	//No se lo que hace esto..pero bueno, de momento aqui se queda
+	//Lo dejo porque no borra de la base de datos, sino de una coleccion rara que hay en IA.js 
 	finalizarPartida: function(id_partida){ 
-		//Esto lo que hacia era borrar la partida. Mejor ya lo hago yo
-	},
+		var partida = getPartida(id_partida);
+		var objFinal = partida.finalizarPartida();
+	return objFinal;
+    },
 });
 
 //Inicializamos el startup
