@@ -60,13 +60,118 @@ cosas las iré marcando con una etiqueta integración y un número).
 		SOLUCION: Estoy tontito. He añadido en models la coleccion. De momento solo añado esa.
 			No me deberían hacer falta más. Dejo el publish de turnoIU con function, si me da error por
 			algun lado lo quito, pero no deberia.
+	5.-Despues de preguntar a Predro.
+		Hay que añadir los paquetes de insecure (sin el funciona pero hace cosas raras, como que las teclas
+		estan mal capturadas, no se ponen bien las piezas y un largo etc etc) y autopublish	(sin este 
+		directamente no arranca el juego). Hay que añadir el paquete de bootstrap, porque si no, los botones
+		no funcionan, aunque a mi no me deberia afectar. Y ya de paso añado el de cuentas de usuario de
+		nuevo..por si acaso.
+		Comando: meteor list-> te lista los paquetes que hay instalados
+		Seguimos...
+		Me cargo el IU_pear.css y retoco un poco el mio. Se hace desagradable tocar con ciertos colores y 
+		tamaños de letra. 
+		Bueno, no me hace ni caso. Paso..a otra cosa. Ya lo miraré. De hecho se ha "desconfigurado" un
+		monton de muchas otras cosas. Tampoco me afecta tanto.
 	(Parentesis para investigar):
 		¿Qué es?
 			Template.draw_matches
+				Es la sala de espera donde se ven todas las partidas
 			Template.menu_bar
+				El menu de carcassone, New_game, Frootwars y AlienInvasion
 			Template.join_match
+				No es nada, la etiqueta existe en el html, pero esta vacia de contenido
 			Template.options
+				Es lo que te sale cuando le das a crear partida
+				Tambien es a lo que te redirige de empezar partida o esperar a que se llene
 		¿Me afecta?
 			current_game = Session.get("current_game");->Yo no uso nada de esto, de momento
+	6.- Seguimos "siguiendo" todo lo que se llama para iniciar una partida.
+	EmpezarTodo->inicializa cosas y me llama a startGame, que inicializa el canvas. No inicia la IA según veo.
+	Despues de clickear option.start_game, y de que te redirija a la pantalla de espera, clickeamos a que no 
+	queremos	esperar más (click #wait_start') y esto llama a:
+		"Meteor.call("generarPartidaPL",partida, function(error){"
+                    if(error){
+                        alert("No ha sido posible crear la partida");
+                    }
+	Que es un metodo meteor del servidor, que a su vez llama a 
+	"generarPartida(objetoPartidaPL.idPartida, objetoPartidaPL.arrayJugadores, objetoPartidaPL.numJugadores)";
+	que es una funcion de IA.js (ojito con las tres funciones que hay aqui...).
+	Esto me pone una traza en la terminal, y me devuelve "return new Partida(id,jugs,num)";
+	Que es un constructor de IA.js:
+	var Partida = function(idPartida,jugs,numJugs){
+		//ahora jugs es un array de objetos jugador...(lo que hablamos con PL) hay que parsear
+		this.idPartida = idPartida;
+		addPartida(this);
+		console.log("he aÃ±adido la partida");
+		console.log("num partidas: " + partidas.length);
+		this.initialize(jugs,numJugs);
+	}
+	Que es gracioso porque dice lo que hablamos con la Pl, y conmigo no han hablado nada. Y hasta aqui.
+	Rectifico. Hasta aqui no. Seguimos.
+	
+	El inizialice llama a "Partida.prototype.initialize = function(jugadores,numJugs)", que como dice, inicializa
+	cosas y llama a this.startCallIU();
+	Este startCallIU llama a "Partida.prototype.startCallIU = function()", que segun un lo que tienen, 
+	"console.log("Vamos a llamar a IU para que empiece la partida y pinten el canvas:");" y despues
+	llaman a " empezarPartida (this.idPartida,arrayJugs,this.getJugadorActual().idJugador);", que es una
+	funcion de IU.js. Todo esta lleno de trazas, como de costumbre.
+	Este "empezarPartida = function(id_partida, arrayJug, user_Id)" llama a "Turno.remove({});"
+	y a "Turno.insert(", que ademas de insertar un monton de cosas inicializadas, inserta 
+	"Comando: "EmpezarPartida",",que se comprueba reactivamente en el tracker.autorun del cliente.
+	Y ya con todo esto, parece ser que acabamos el rastro y de una maldita vez se empieza la partida.
+	
+	7.- Siguiendo el rastro!! Vamos a tracear todo y ver si llegamos aqui como debemos llegar.
+		A.-)Reactivamente miramos si hay un Turno[i].comando === "EmpezarPartida" Para llamar a 
+		EmpezarTodo
+		Volvemos a dejar esto tal cual lo tiene el cliente.js de estos tios. En el autorun gordo.
+		Ahora no va. El objetivo final es que vuelva a funcionar. En principio cuando funcione esto, funciona
+		todo.
+		B.-)Meteor.call("generarPartidaPL",partida, function(error){
+                    if(error){
+                        alert("No ha sido posible crear la partida");
+                    }
+		    Donde partida es:
+			var partida = Object.create(Object.prototype);
+			partida.idPartida= info_partida._id;
+			partida.nombrePartida= info_partida.match_name;
+			partida.numJugadores= info_partida.num_players;				
+			partida.arrayJugadores= info_partida.players_array;
+		Añado este call donde estaba en el EmpezarTodo. Es decir, cada vez que un jugador en el cliente ve que
+		se ha empezado su partida, llamamos al metodo. Lo pongo con el lock, para que solo se llame una vez.
+		Elimino temporalmente el pie de pagina. No hacia caso y molestaba.
+		No funciona del todo. Aparece el canvas, eso sí. Luego llega hasta el final. Alguno de los datos estan mal.
+		A la llamada del meteor.call se le pasa todo correctamente.
+		Siguiendo con el traceo, me saltan dos errores cuando me logueo:
+			this.canvas is null y 
+			game is undefined
+		Igual ni me afecta. Sigo.
+		Hasta aqui todo se corresponde.
+		Suponemos que el addPartida  funciona correctamente, es decir, que no necesita nada global como 
+		un nombre que nosotros hayamos puesto diferente.
+		Entre el funciona 10 y el funciona 11 hay muchas trazas de esta gente que espero que esten bien.
+		Entre 12 y 13 hay trazas con errores. Cosas a undefined y similares.
+			this.idPartida es: RttGCsT6GJbNp49R8
+			el turno es: 0
+			el jugador act es: [object Object]
+			el id del jugador es: undefined
+		Por supuesto a partir de aqui hay mas cosas que no son correctas.
+		Chequeo todo esto...
+		Antes de FUNCIONA 10, se le pasa todo a initialize correctamente..
+		El problema creo que esta entre el FUNCIONA1 y el  FUNCIONA2, aunque añadi lo que ocurria despues de 
+		darle a empezar partida (su segunda ventanita que era la sala de espera de la partida), no añadi lo que 
+		era su startgame, que era cuando creabas una partida. Por lo visto, se añadia en una variable global
+		llamada Jugadores algunos datos del usuario que luego se requieren en el inicialize de  IA.js.
+		Ademas, esto ocurre solo una vez, luego cada usuario mete sus datos en esa variable cuando quiere
+		empezar una partida y luego en la IA,js->initialize se sacan todos.
+		Por cierto, en jugadores tambien se le añade jugadores.puntuacion = score. Yo de momento voy a pasar
+		de ello.
+		Seguimos con el mismo problema..me falta algo.
+		Jugador y players se guardan bien. Voy a ver si son visibles desde otros lados.
+		Pues no, no son visibles. Esta gente utiliza Matches_games, lo cual no deja de ser un parche..porque lo 
+		utilizan para cosas que no deberian.
+		Jugs/jugadores tiene dos campos: jugadores[i].idJugador, jugadores[i].nombreJugador), en mi caso solo tiene
+		la id. Voy a intentar modificar mejor eso.
+		Venga y hago commit antes.
+		
 
 		

@@ -22,26 +22,47 @@ function gameReady() {
     });
 }
 
-//Si eres jugador, comprobamos si tu partida esta empezada y llamammos al canvas
+//Si eres jugador, comprobamos si tu partida esta empezada y llamamos al canvas
 function partidaEmpezada() {
-    var empezada = false;
-    var gameplays = Gameplays.find({});
-    var idusuario = Meteor.userId();
-    gameplays.forEach(function (gameplay) {
-        if ((gameplay.gameplay_list.indexOf(idusuario) != -1) && (gameplay.status == true))  {
-		empezada = true;
-		$('#container_lateral1').hide();
-		$('#container_lateral2').hide();
-		$('#container_principal').show();
-		Session.set('tab', null);
-		//INTEGRACION 1
-		if (gamelock == false) {
-			//Supongo que esto lo llaman todos los jugadores
-			EmpezarTodo(gameplay._id, gameplay.gameplay_list, idusuario);
+	var empezada = false;
+	var gameplays = Gameplays.find({});
+	var idusuario = Meteor.userId();
+	gameplays.forEach(function (gameplay) {
+		if ((gameplay.gameplay_list.indexOf(idusuario) != -1) && (gameplay.status == true))  {
+			empezada = true;
+			$('#container_lateral1').hide();
+			$('#container_lateral2').hide();
+			$('#container_principal').show();
+			Session.set('tab', null);
+			//INTEGRACION 1
+			if (gamelock == false) {
+				//Supongo que esto lo llaman todos los jugadores
+				console.log("FUNCIONA1. Cliente.js. partidaEmpezada y gamelock == false");
+				console.log("FUNCIONA1.1 Cliente.js. Inicializando algunas variables que son globales. Esto es su click startGame");
+				var jugador= Object.create(Object.prototype);
+				players=[];
+				jugador.nombreJugador= Meteor.user().username
+				jugador.idJugador= idusuario;
+				players.push(jugador);
+				console.log("jugador:", jugador);
+				console.log("players:", players);
+				console.log("FUNCIONA1.2 Cliente.js. Inicializando partida para pasarlo al call. Esto es su click wait_start");
+				var partida = Object.create(Object.prototype);
+				partida.idPartida= gameplay._id;
+				partida.nombrePartida= gameplay.gameplay_name;
+				partida.numJugadores=  gameplay.max_players;				
+				partida.arrayJugadores= gameplay.gameplay_list;
+				console.log(partida);
+				console.log("FUNCIONA2. Cliente.js. Antes de llamar a call (generarPartida)");
+				Meteor.call("generarPartidaPL",partida, function (error) {
+					if (error) {
+						alert("No ha sido posible crear la partida");
+					}
+				});
+			}
+			//
 		}
-		//
-        }   
-    });
+	});
     return empezada;
 }
 
@@ -52,6 +73,8 @@ Tracker.autorun(function(){
     gameReady();
     if (partidaEmpezada() == true) {
         gamelock = true;
+	console.log("jugador:", jugador);
+	console.log("players:", players);
     }
     else {
         gamelock = false;
@@ -65,6 +88,10 @@ var reactiva = null;
 Tracker.autorun(function() {
 	reactiva = Turno.find();
 	reactiva.forEach(function(m) {
+		if(m.Comando === "EmpezarPartida" && m.ladoscroll == ""){
+			console.log("FUNCIONA17. client.js. Dentro del tracker.autorun y antes de la funcion EmpezarTodo");
+			EmpezarTodo(m.ID_Partida, m.Jugadores, m.User_id);
+		}
 		if (Meteor.userId() != User_IdIA) {
 			if (!m.scroll) {
 				if (m.Comando === "PedirPieza") {

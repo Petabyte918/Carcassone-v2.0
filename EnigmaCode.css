@@ -123,6 +123,18 @@ ul ul {
 
 ul li:hover > ul {
 	display: inline;
+	color: red;
+}
+
+ul li:link > ul {
+	color: red;
+}
+
+ul li:visited > ul {
+	color: red;
+}
+ul li:active > ul {
+	color: red;
 }
 
 #container_lateral1 {
@@ -216,8 +228,6 @@ ul li:hover > ul {
     overflow: scroll;
 }
 
-
-
 #waiting p2{
     margin: 1em;
     font-size: 1.5em;
@@ -251,7 +261,7 @@ ul li:hover > ul {
     font-size: 0.6em;
     vertical-align: middle;
     line-height: auto;
-    display: block;
+    display: none;
     clear: both;
     z-index: 300;
     background: #384047;

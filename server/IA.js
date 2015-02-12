@@ -1177,8 +1177,12 @@ var Partida = function(idPartida,jugs,numJugs){
     //ahora jugs es un array de objetos jugador...(lo que hablamos con PL) hay que parsear
     this.idPartida = idPartida;
     addPartida(this);
-    console.log("he aÃ±adido la partida");
-    console.log("num partidas: " + partidas.length);
+	console.log("FUNCIONA8. IA.js. Dentro de partida. Partida añadida con addPartida(this)");
+	console.log("FUNCIONA9 IA.js. idPartida:", idPartida);
+	console.log("FUNCIONA9.1 IA.js. jugs: ", jugs);
+	console.log("FUNCIONA9.2 IA.js. numJugs: ", numJugs);
+	console.log("FUNCIONA9.3 IA.js. Numero de partidas es: ", partidas.length);
+	console.log("FUNCIONA10 IA.js. Dentro de partida. Antes de llamar a initizalize");
     this.initialize(jugs,numJugs);
 }
 
@@ -1206,6 +1210,7 @@ Partida.prototype.initialize = function(jugadores,numJugs){
     }
     //el turno es el indice del array jugs
     this.turno = 0;
+    console.log("FUNCIONA11. IA.js. Dentro de partida.prototype.initialize y antes de llamar a startCallIU()");
     this.startCallIU();
 }
 
@@ -1219,11 +1224,13 @@ Partida.prototype.startCallIU = function(){
                 obj.numSeguidores = 7;
                 arrayJugs.push(obj);
         });
+	console.log("FUNCIONA12. IA.js. Dentro de startCallIU. Aqui viene un monton de trazas de estos. Se las dejamos");
         console.log("Vamos a llamar a IU para que empiece la partida y pinten el canvas:");
-		console.log("EN IA.JS this.idPartida es: " +this.idPartida);
-		console.log("el turno es: " + this.turno);
-		console.log("el jugador act es: " + this.getJugadorActual());
-		console.log("el id del jugador es: " + this.getJugadorActual().idJugador);
+	console.log("this.idPartida es: " +this.idPartida);
+	console.log("el turno es: " + this.turno);
+	console.log("el jugador act es: " + this.getJugadorActual());
+	console.log("el id del jugador es: " + this.getJugadorActual().idJugador);
+	console.log("FUNCIONA13. IA.js. Dentro de startCallIU y antes de llamar a empezarPartida");
         empezarPartida (this.idPartida,arrayJugs,this.getJugadorActual().idJugador);
 }
 
@@ -1945,7 +1952,10 @@ addPartida  = function(partida){
 //******* para meteor *********
 
 generarPartida = function(id,jugs,num){
-	console.log("IA: he llamado a generar partida");
+	console.log("FUNCIONA4. IA.js. Dentro de generarPartida. Antes de llamar a  new Partida(id,jugs,num);");
+	console.log("FUNCIONA5. IA.js. ID", id);
+	console.log("FUNCIONA6. IA.js. Jugs", jugs);
+	console.log("FUNCIONA7. IA.js Num", num);
     return new Partida(id,jugs,num);
 }
 
