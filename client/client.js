@@ -9,17 +9,42 @@ Meteor.subscribe("turnoIU");
 //Para tener acceso a Stats
 Meteor.subscribe("all_stats");
 
-//Solo si eres el creador mandamos peticion al servidor para cambiar el estado de la partida
+//Solo si eres el creador y tu partida tiene que empezar, cambiamos el status de la partida
 function gameReady() {
-    var gameplays = Gameplays.find({status: false});
-    gameplays.forEach(function (gameplay) {
-        if ((gameplay.num_players == gameplay.max_players) &&
-            (gameplay.creator_id == Meteor.userId())) {
-            begin = true;
-            //Cambiamos el status del gameplay
-            Gameplays.update({_id: gameplay._id}, {$set: {status: true}});
-        }   
-    });
+	var gameplays = Gameplays.find({status: false});
+	gameplays.forEach(function (gameplay) {
+		if ((gameplay.num_players == gameplay.max_players) &&
+			(gameplay.creator_id == Meteor.userId())) {
+			begin = true;
+			//Cambiamos el status del gameplay
+			Gameplays.update({_id: gameplay._id}, {$set: {status: true}});
+			//Llamamos a generar partida
+			console.log("FUNCIONA2 Cliente.js. En gameReady(). Inicializando partida para pasarlo al call. Esto es su click wait_start");
+			var partida = Object.create(Object.prototype);
+			partida.idPartida= gameplay._id;
+			partida.nombrePartida= gameplay.gameplay_name;
+			partida.numJugadores=  gameplay.max_players;
+			//Hay que pasarle a partida.arrayJugadores un array que sea jugadores[i].idJugador, jugadores[i].nombreJugador
+			players = [];
+			gameplay.gameplay_list.forEach (function (idjugador_en_partida) {
+				var jugador= Object.create(Object.prototype);
+				jugador.idJugador= idjugador_en_partida;
+				jugador.nombreJugador= Meteor.users.findOne({_id: idjugador_en_partida}).username;
+				jugador.score = 0;
+				players.push(jugador);
+				console.log("jugador:", jugador);
+				console.log("players:", players);
+			});
+			partida.arrayJugadores= players;
+			console.log("FUNCIONA2.1. Cliente.js. En gameReady(). Partida es:", partida);
+			console.log("FUNCIONA2.2. Cliente.js. En gameReady(). Antes de llamar a call (generarPartida) y pasarle partida");
+			Meteor.call("generarPartidaPL",partida, function (error) {
+				if (error) {
+					alert("No ha sido posible crear la partida");
+				}
+			});
+		}   
+	});
 }
 
 //Si eres jugador, comprobamos si tu partida esta empezada y llamamos al canvas
@@ -30,37 +55,12 @@ function partidaEmpezada() {
 	gameplays.forEach(function (gameplay) {
 		if ((gameplay.gameplay_list.indexOf(idusuario) != -1) && (gameplay.status == true))  {
 			empezada = true;
+			//Si el juego va a empezar, para cada usuario, mostramos y ocultamos cosas.
+			//Al salir de esta funcion se pondra gamelock a true, para bloquear las vistas
 			$('#container_lateral1').hide();
 			$('#container_lateral2').hide();
 			$('#container_principal').show();
 			Session.set('tab', null);
-			//INTEGRACION 1
-			if (gamelock == false) {
-				//Supongo que esto lo llaman todos los jugadores
-				console.log("FUNCIONA1. Cliente.js. partidaEmpezada y gamelock == false");
-				console.log("FUNCIONA1.1 Cliente.js. Inicializando algunas variables que son globales. Esto es su click startGame");
-				var jugador= Object.create(Object.prototype);
-				players=[];
-				jugador.nombreJugador= Meteor.user().username
-				jugador.idJugador= idusuario;
-				players.push(jugador);
-				console.log("jugador:", jugador);
-				console.log("players:", players);
-				console.log("FUNCIONA1.2 Cliente.js. Inicializando partida para pasarlo al call. Esto es su click wait_start");
-				var partida = Object.create(Object.prototype);
-				partida.idPartida= gameplay._id;
-				partida.nombrePartida= gameplay.gameplay_name;
-				partida.numJugadores=  gameplay.max_players;				
-				partida.arrayJugadores= gameplay.gameplay_list;
-				console.log(partida);
-				console.log("FUNCIONA2. Cliente.js. Antes de llamar a call (generarPartida)");
-				Meteor.call("generarPartidaPL",partida, function (error) {
-					if (error) {
-						alert("No ha sido posible crear la partida");
-					}
-				});
-			}
-			//
 		}
 	});
     return empezada;
@@ -69,19 +69,18 @@ function partidaEmpezada() {
 //Cuando no tenemos una partida empezada desbloqueamos
 var gamelock = false;
 Tracker.autorun(function(){
-    var current_Stat = Session.get("current_Stat");
-    gameReady();
-    if (partidaEmpezada() == true) {
-        gamelock = true;
-	console.log("jugador:", jugador);
-	console.log("players:", players);
-    }
-    else {
-        gamelock = false;
-	$('#container_lateral1').show();
-        $('#container_lateral2').show();
-        $('#container_principal').hide();     
-    }
+	var current_Stat = Session.get("current_Stat");
+	console.log("FUNCIONA1. Cliente.js->tracker.autorun. Comprobamos si el juego esta listo para empezar");
+	gameReady();
+	if (partidaEmpezada() == true) {
+		gamelock = true;
+	}
+	else {
+		gamelock = false;
+		$('#container_lateral1').show();
+		$('#container_lateral2').show();
+		$('#container_principal').hide();     
+	}
 });
 
 var reactiva = null;

@@ -172,6 +172,32 @@ cosas las iré marcando con una etiqueta integración y un número).
 		Jugs/jugadores tiene dos campos: jugadores[i].idJugador, jugadores[i].nombreJugador), en mi caso solo tiene
 		la id. Voy a intentar modificar mejor eso.
 		Venga y hago commit antes.
+		Vale, por lo visto lo que es info_partida.players_array; que es el array de records de los jugadores, yo le he
+		pasado gameplay.gameplay_list; que es el array normal de jugadores. A ver como shit cambio ese de manera
+		sencilla...
+		Ademas, por lo que parece a generarPartida, solo lo deberia llamar el que crea la partida y el que
+		Me cargo lo que tenia en empezarPartida, porque no tiene sentido que haga cosas que ya tengo hechas, asi 
+		que lo paso todo a gameReady, y reutilizo cosas.
+		Bueno, creo que la solucion que utilizo es buena buena. A ver si funciona
+		No acaba de funcionar. Yo creo que esta bien. Le falta el campo score...voy a ponerlo a 0, a ver si es eso.
+		Pues no. Ya medio funciona, me deja pedir fichas, pero no colocarlar. Creo que es porque el nombre se lo he
+		pasado mal...Tengo:
+			jugador: Object { idJugador="NRbk8fzuzp4iTxuny", nombreJugador={...}, score=0}
+			players: [Object { idJugador="NRbk8fzuzp4iTxuny", nombreJugador={...}, score=0}]
+		Donde jugador es cada jugador y players es el array completo que le añado a partida junto con gameplay_name
+		y el id del creador, cuando hago el call a generar partida.
+		Deberia tener:
+			Players: [Object { propietario="firefox", nombre_partida="asd", num_jug=2}]
+			Partida: Object { idPartida="TZXspfGCsxgkJaJt3", nombrePartida="asd", numJugadores=2, más...}
+		Pues eso, que no esta bien..lo cambio.
+		Ajá! Eso funciona. Pero estamos en las mismas. No me deja colocar las fichas, aunque si pedirlas.
+		Ya seguiré en otro momento.
+		Pistas:
+			Lo mismo del principio del dia...
+			Entre FUNCIONA11 y FUNCIONA12:
+			el jugador act es: [object Object], pero gran parte de las cosas solucionadas.
+
+			
 		
 
 		
