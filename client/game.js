@@ -1387,21 +1387,11 @@ finalPL = function(array) {
 EmpezarTodo = function (id_partida, arrayJugadores, user_Id) {
 
 	console.log("FUNCIONA18. game.js. Dentro de EmpezarTodo y antes de Game.initialize");
-    Game.initialize("gameC",sprites,startGame);
-     
-    JugadoresIA = arrayJugadores;
-    User_IdIA = user_Id;
-    Id_Partida = id_partida;
-    console.log("ID_PARTIDA_RECIBIDO: " + Id_Partida);
-    longitudcolor = arrayJugadores.length;
-    
+	Game.initialize("gameC",sprites,startGame);
+	JugadoresIA = arrayJugadores;
+	User_IdIA = user_Id;
+	Id_Partida = id_partida;
+	console.log("ID_PARTIDA_RECIBIDO: " + Id_Partida);
+	longitudcolor = arrayJugadores.length;
 	console.log("FUNCIONA19. game.js. Dentro de EmpezarTodo y despues de initialize. Se asignan varias variables globales. FIN");
-    //ctxt.restore();
 };
-/*
-EmpezarTodo = function (arrayJugadores) {
-    console.log("empezando");
-    //Game.initialize("game",sprites,startGame);
-};
-
-*/

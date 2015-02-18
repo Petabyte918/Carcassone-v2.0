@@ -1182,36 +1182,39 @@ var Partida = function(idPartida,jugs,numJugs){
 	console.log("FUNCIONA9.1 IA.js. jugs: ", jugs);
 	console.log("FUNCIONA9.2 IA.js. numJugs: ", numJugs);
 	console.log("FUNCIONA9.3 IA.js. Numero de partidas es: ", partidas.length);
-	console.log("FUNCIONA10 IA.js. Dentro de partida. Antes de llamar a initizalize");
+	console.log("FUNCIONA9.4 IA.js. Dentro de partida. Antes de llamar a initizalize");
     this.initialize(jugs,numJugs);
 }
 
 Partida.prototype.initialize = function(jugadores,numJugs){
-    //iran las cosas de jugadores y ia etcetc
-    this.listaCampos = [];
-    this.listaCiudades = [];
-    this.listaCaminos = [];
-    this.listaMonasterios = [];
-    this.tablero = new Tablero(this);   
-    this.jugs = [];
-    
-    var idIA = 0;
-    for (var i = 0; i<numJugs; i++){
-        if (i>= jugadores.length){
-            var jug = new IAPlayer (idIA);
-            jug.partida = this;
-            this.jugs [i] = jug;
-            idIA ++;
-        }else{
-            var jug = new Jugador (jugadores[i].idJugador, jugadores[i].nombreJugador);
-            jug.partida = this;
-            this.jugs[i] = jug;
-        }
-    }
-    //el turno es el indice del array jugs
-    this.turno = 0;
-    console.log("FUNCIONA11. IA.js. Dentro de partida.prototype.initialize y antes de llamar a startCallIU()");
-    this.startCallIU();
+	//iran las cosas de jugadores y ia etcetc
+	this.listaCampos = [];
+	this.listaCiudades = [];
+	this.listaCaminos = [];
+	this.listaMonasterios = [];
+	this.tablero = new Tablero(this);   
+	this.jugs = [];
+	console.log("FUNCIONA10 IA.js. Initialize. Jugadores", jugadores);
+	var idIA = 0;
+	for (var i = 0; i<numJugs; i++){
+		if (i>= jugadores.length){
+			var jug = new IAPlayer (idIA);
+			jug.partida = this;
+			this.jugs [i] = jug;
+			idIA ++;
+		}else{
+			var jug = new Jugador (jugadores[i].idJugador, jugadores[i].nombreJugador);
+			jug.partida = this;
+			this.jugs[i] = jug;
+			console.log("FUNCIONA10.1 IA.js. Initialize. jugadores[i].idJugador: ", jugadores[i].idJugador);
+			console.log("FUNCIONA10.2 IA.js. Initialize. jugadores[i].nombreJugador: ", jugadores[i].nombreJugador);
+			console.log("FUNCIONA10.3 IA.js. Initialize. i ", i);
+		}
+	}
+	//el turno es el indice del array jugs
+	this.turno = 0;
+	console.log("FUNCIONA11. IA.js. Dentro de partida.prototype.initialize y antes de llamar a startCallIU()");
+	this.startCallIU();
 }
 
 Partida.prototype.startCallIU = function(){

@@ -147,7 +147,7 @@ Meteor.methods({
 		return resumenTurno;
 	},
 	generarPartidaPL: function(objetoPartidaPL){
-		console.log("FUNCIONA3. Server.js. Antes de llamar a generarPartida");
+		console.log("FUNCIONA3. Server.js. Antes de llamar a generarPartida. ObjetoPartidaPL", objetoPartidaPL);
 		generarPartida(objetoPartidaPL.idPartida, objetoPartidaPL.arrayJugadores, objetoPartidaPL.numJugadores);
 	},
 	//No se lo que hace esto..pero bueno, de momento aqui se queda

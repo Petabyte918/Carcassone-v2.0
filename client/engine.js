@@ -3,10 +3,12 @@ Game = new function() {
   // Inicializa el juego
   this.initialize = function(canvasElementId,sprite_data,callback) {
 	  this.canvas = document.getElementById(canvasElementId);
-	  console.log("ALVARO " + canvasElementId);
+	  console.log("Engine.js. Game->initialize. Antes. canvasElementId", canvasElementId);
+	  console.log("Engine.js. Game->initialize. Despues. canvasElementId", canvasElementId);
 	  this.width = this.canvas.width;
 	  this.height= this.canvas.height;
 	  this.ctxt = this.canvas.getContext && this.canvas.getContext('2d');
+	  console.log("Engine.js. Game->initialize. Despues. canvasElementId", canvasElementId);
 	  if(!this.ctxt) { return alert("Please upgrade your browser to play"); }
 	  //this.ctxt.save();
       //Modificamos las propiedades del canvas

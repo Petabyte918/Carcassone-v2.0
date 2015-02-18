@@ -196,7 +196,11 @@ cosas las iré marcando con una etiqueta integración y un número).
 			Lo mismo del principio del dia...
 			Entre FUNCIONA11 y FUNCIONA12:
 			el jugador act es: [object Object], pero gran parte de las cosas solucionadas.
-
+		Nada. Ejecutando lo mismo con el codigo de los otros eso es normal. Luego todo eso ya debria estar solucionado.
+		Se me ocurre lo que me dice el firebug de el canvas de:
+		TypeError: this.canvas is               engine....d99db2a (línea 7, col 3)
+		TypeError: game is undefined       game.js...163dbe3 (línea 39, col 1)
+		Si no ni idea ya.
 			
 		
 
